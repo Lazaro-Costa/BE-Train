@@ -4,7 +4,7 @@ import { CidadesController } from '../controllers/cidades';
 const router = Router();
 
 router.get('/', (_, res)=>{
-  res.send('Home Site');
+  res.send('Hello World!');
 });
 router.get('/cidades', 
   CidadesController.getAllValidation,

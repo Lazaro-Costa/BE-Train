@@ -1,10 +1,10 @@
-import { RequestHandler } from 'express';
+import { Request, Response } from 'express';
 import * as yup from 'yup';
 import { StatusCodes } from 'http-status-codes';
 import { validation } from '../../shared/middleware';
 
 interface IParamProps{
-  id: number;
+  id?: number;
 }
 interface IBodyProps{
   nome: string;
@@ -19,14 +19,12 @@ export const updateByIdValidation = validation((getSchema) => ({
   }))
 }));
 
-export const updateById : RequestHandler<
-{ Params: IParamProps; Body: IBodyProps },
-{},
-{},
-{},
-Record<string, {}>
-> = (req, res)=> {
-  console.log(req.params);
-  console.log(req.body);
-  return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send('Nao implementado');
+export const updateById = async (req: Request<IParamProps, {}, IBodyProps>, res: Response) => {
+  const { id } = req.params;
+  if(Number(id) === 999) return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+    errors: {
+      default: 'Registro não encontrado',
+    }
+  });
+  return res.status(StatusCodes.NO_CONTENT).send();
 };
