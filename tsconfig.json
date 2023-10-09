@@ -14,5 +14,11 @@
     ],
     "outDir": "./dist",
     "rootDir": "./src",
-  }
+  },
+  "exclude": [
+    "./jest.config.ts",
+    "./node_modules",
+    "./tests",
+    "./dist"
+  ]
 }
