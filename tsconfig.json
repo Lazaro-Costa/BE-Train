@@ -12,7 +12,7 @@
       "ES2021.Promise",
       "ES2021"
     ],
-    "outDir": "./dist",
+    "outDir": "./build",
     "rootDir": "./src",
   },
   "exclude": [
