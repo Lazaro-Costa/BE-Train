@@ -1,19 +1,35 @@
 import { StatusCodes } from 'http-status-codes';
+
 import { testServer } from '../jest.setup';
 
+
 describe('Cidades - GetAll', () => {
-  it('Get All Registers', async () => {
+
+  it('Buscar todos os registros', async () => {
+
     const res1 = await testServer
       .post('/cidades')
-      .send({ nome: 'Caxias do Sul' });
+      .send({ nome: 'Caxias do sul' });
 
     expect(res1.statusCode).toEqual(StatusCodes.CREATED);
-    
-    const resCriada = await testServer
+
+    const resBuscada = await testServer
       .get('/cidades')
       .send();
-    expect(Number(resCriada.header['x-total-count'])).toBeGreaterThan(0);
-    expect(resCriada.statusCode).toEqual(StatusCodes.OK);
-    expect(resCriada.body.length).toBeGreaterThan(0);
+
+    expect(Number(resBuscada.header['x-total-count'])).toBeGreaterThan(0);
+    expect(resBuscada.statusCode).toEqual(StatusCodes.OK);
+    expect(resBuscada.body.length).toBeGreaterThan(0);
+  });
+
+  it('URI com filtro', async () => {
+
+    const resBuscada = await testServer
+      .get('/cidades?page=1&limit=10&filter=Sul')
+      .send();
+
+    expect(Number(resBuscada.header['x-total-count'])).toBeGreaterThan(0);
+    expect(resBuscada.statusCode).toEqual(StatusCodes.OK);
+    expect(resBuscada.body.length).toBeGreaterThan(0);
   });
 });
