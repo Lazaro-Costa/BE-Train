@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import * as yup from 'yup';
 import { StatusCodes } from 'http-status-codes';
 import { validation } from '../../shared/middleware';
+import { CidadesProvider } from '../../database/providers/cidades';
 
 interface IParamProps{
   id?: number;
@@ -14,15 +15,17 @@ export const getByIdValidation = validation((getSchema) => ({
 }));
 
 export const getById = async (req: Request<IParamProps>, res: Response) => {
+  const { id } = req.params;
+  if(id){
+    const response = await CidadesProvider.getById(Number(id));
+    if(response instanceof Error) return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ errors: { default: response.message } });
+    return res.status(StatusCodes.OK).json(response);
 
-  if (Number(req.params.id) === 999) return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-    errors: {
-      default: 'Registro não encontrado'
-    }
-  });
-
-  return res.status(StatusCodes.OK).json({
-    id: req.params.id,
-    nome: 'Caxias do Sul',
-  });
+  }else{
+    return res.status(StatusCodes.BAD_REQUEST).json({
+      errors: {
+        default: 'O parâmetro "ID" precisa ser informado.'
+      }
+    })
+  }
 };
